@@ -26,5 +26,5 @@ public class p2579 {
         br.close();
     }
 
-    void 
+
 }
