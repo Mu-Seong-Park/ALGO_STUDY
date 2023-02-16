@@ -21,6 +21,7 @@ public class p1012 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int testCase = Integer.parseInt(br.readLine());
 
+
         for(int test_case = 0 ; test_case < testCase ; test_case++) {
             String[] nums = br.readLine().split(" ");
             m = Integer.parseInt(nums[0]); // 가로
@@ -32,6 +33,7 @@ public class p1012 {
             for(int i = 0 ; i < k ; i++) {
                 // 위치의 수 k만큼 field의 값을 설정.
                 StringTokenizer st = new StringTokenizer(br.readLine());
+
                 int x = Integer.parseInt(st.nextToken());
                 int y = Integer.parseInt(st.nextToken());
                 field[x][y] = 1;
@@ -52,6 +54,7 @@ public class p1012 {
             bw.write(worms+"\n");
             bw.flush();
         }
+
         bw.flush();
         bw.close();
         br.close();
