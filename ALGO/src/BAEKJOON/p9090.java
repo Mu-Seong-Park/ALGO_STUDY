@@ -16,7 +16,7 @@ class MyQuickSort {
      * @param a 정렬할 배열
      */
     static public void sort(int[] a) {
-
+        middlePivotSort(int[] a, int low, int high);
     }
 
     /**
@@ -28,5 +28,13 @@ class MyQuickSort {
 
     }
 
-    static private int partition()
+    /**
+     * @param a
+     * @param right
+     * @param left
+     * @return
+     */
+    static private int partition(int[] a, int right, int left) {
+
+    }
 }
