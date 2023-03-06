@@ -14,5 +14,5 @@ public class p24090 {
 }
 
 class QuickSort1 {
-    
+
 }

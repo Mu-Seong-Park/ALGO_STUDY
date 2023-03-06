@@ -1,6 +1,8 @@
 package BAEKJOON;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class p5397 {
     public static void main(String[] args) throws IOException {
@@ -11,9 +13,42 @@ public class p5397 {
 
         for(int t =  0 ; t < testCase ; t++) {
 
-            StringBuilder sb = new StringBuilder();
-            String password = br.readLine();
+            String[] password = br.readLine().split("");
+            Stack<String> left = new Stack<>();
+            Stack<String> right = new Stack<>();
 
+            for(String str : password) {
+                switch (str) {
+                    case "<":
+                        if(!left.isEmpty()){
+                            right.push(left.pop());
+                        }
+                        break;
+
+                    case ">":
+                        if (!right.isEmpty()) {
+                            left.push(right.pop());
+                        }
+                        break;
+
+                    case "-":
+                        if (!left.isEmpty()) {
+                            left.pop();
+                        }
+                        break;
+
+                    default:
+                        left.push(str);
+                }
+            }
+
+            while(!left.isEmpty()) {
+                right.push(left.pop());
+            }
+            while(!right.isEmpty()) {
+                bw.write(right.pop()+"");
+            }
+            bw.write("\n");
         }
 
         br.close();
@@ -33,10 +68,7 @@ class MyLinkedList1 {
 
     public void insertNode(Node1 preNode, String data) {
         Node1 newNode = new Node1(data);
-
         newNode.nextNode = preNode.nextNode;
-
-
         preNode.nextNode = newNode;
     }
 
@@ -54,6 +86,40 @@ class MyLinkedList1 {
 
             temp.nextNode = newNode;
         }
+    }
+
+    public void deleteNode() {
+        Node1 preNode;
+        Node1 tempNode;
+
+        if(head == null) {
+            return;
+        }
+
+        if(head.nextNode == null) {
+            head = null;
+        } else {
+            preNode = head;
+            tempNode = head.nextNode;
+
+            while(tempNode.nextNode != null) {
+                preNode = tempNode;
+                tempNode = tempNode.nextNode;
+            }
+
+            preNode.nextNode = null;
+        }
+    }
+
+    public void printList() {
+        Node1 tempNode = this.head;    // tempNode에 head가 가리키는 첫번째 노드를 할당
+
+        // tempNode가 null이 아닐 때까지 반복하여 출력
+        while(tempNode != null) {
+            System.out.print(tempNode.getData());
+            tempNode = tempNode.nextNode;    // temp 노드에 다음 노드(tempNode.link) 할당.
+        }
+        System.out.println();
     }
 }
 
