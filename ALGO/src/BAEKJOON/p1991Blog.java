@@ -2,7 +2,7 @@ package BAEKJOON;
 
 import java.io.*;
 
-public class p1991 {
+public class p1991Blog {
     static MyTreeNode head = new MyTreeNode('A',null,null);
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
