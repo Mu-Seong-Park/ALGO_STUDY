@@ -1,131 +1,268 @@
 package BAEKJOON;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
+import java.util.ArrayDeque;
 
 public class p5430 {
-    static int[] numsArray;
-    static int rCount;
+
+    public static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static StringBuilder sb = new StringBuilder();
+
     public static void main(String[] args) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int iter = Integer.parseInt(br.readLine());
+
+        ArrayDeque<Integer> deque;
         StringTokenizer st;
-        for(int i = 0 ; i < iter ; i++) {
-            String[] cal = br.readLine().split("");
-            int numCount = Integer.parseInt(br.readLine());
-            st = new StringTokenizer(br.readLine(),"[],");
-            rCount = 0;
-            numsArray = new int[numCount];
 
-            if(st.countTokens() > 0) {
-                for(int j = 0 ; j < numCount ; i++) {
-                    numsArray[j] = Integer.parseInt(st.nextToken());
-                }
+        int T = Integer.parseInt(br.readLine());
+
+
+
+        while(T --> 0) {
+
+            String command = br.readLine();	// 문제에서 p에 해당하는 명령어
+            int n = Integer.parseInt(br.readLine());
+
+            /*
+             *  [a,b,c,...,x] 중 구분해야 할 것은 대괄호([, ])와 반점(,) 이다.
+             *  StringTokenizer로 여러 구분자를 사용 하고 싶다면
+             *  구분할 문자들을 합쳐서 넘겨주면 된다.
+             *
+             *  만약 split()을 사용하고싶은 경우 정규식으로는
+             *  String input = br.readLine();
+             *  String[] s = input.subString(1, input.length - 1).split(","); 을 해주어야 한다.
+             *
+             *  subString을 쓰지않고, split("[^0-9]") 또는,
+             *  split("[\\[\\]\\,") 같이 정규식으로만 쓴다면 첫 번째 인자가 정규식에 걸려
+             *  빈 문자열을 반환하게 되기 때문
+             *
+             *  ex)
+             *  str = "[1,2,3,4]";
+             *  strr[] = str.split("[\\[\\]\\,");
+             *
+             *  result)
+             *  strr[0] = ""
+             *  strr[1] = "1"
+             *  strr[2] = "2"
+             *  strr[3] = "3"
+             *  strr[4] = "4"
+             */
+            st = new StringTokenizer(br.readLine(), "[],");
+
+            deque = new ArrayDeque<Integer>();
+
+            // 덱에 배열 원소를 넣어준다.
+            for(int i = 0; i < n; i++) {
+                deque.add(Integer.parseInt(st.nextToken()));
             }
 
-            int result = calculate(cal);
-
-
-            if(result == 0){
-                bw.write("error\n");
-            } else {
-                bw.write("[");
-                if(rCount % 2 ==0 ){
-                    for(int j = 0 ; j < numsArray.length ; j++) {
-                        bw.write(numsArray[j]+"");
-                        if(j < numsArray.length - 1) {
-                            bw.write(",");
-                        }
-                        else {
-                            bw.write("]\n");
-                        }
-                    }
-                } else {
-                    for(int j = numsArray.length - 1 ; j >= 0 ; j--) {
-                        bw.write(numsArray[j]+"");
-                        if(j > 0) {
-                            bw.write(",");
-                        }
-                        else {
-                            bw.write("]\n");
-                        }
-                    }
-                }
-            }
+            AC(command, deque);
         }
 
+        System.out.println(sb);
 
-        bw.flush();
-        bw.close();
-        br.close();
     }
 
-//    static int[] stringToIntArray(int numCount, String s) {
-//        int[] nums = new int[numCount];
-//
-//        if(numCount > 0) {
-//            nums = new int[numCount];
-//
-//
-//        }
-//
-//        return nums;
-//    }
+    public static void AC(String command, ArrayDeque<Integer> deque) {
 
-//    static int[] r(int[] array) {
-//        if(array.length > 1) {
-//
-//            int[] newArray = new int[array.length];
-//
-//            for(int i = 0 ; i < array.length ; i++) {
-//                int temp = array[i];
-//                newArray[i] = array[array.length - i - 1];
-//                array[i] = temp;
-//            }
-//
-//            return newArray;
-//        }
-//        else {
-//            return array;
-//        }
-//    }
+        boolean isRight = true;
 
-    static int[] d(int[] array,int r) {
+        for(char cmd : command.toCharArray()) {
 
-        if(array.length == 0 || array.length < 0) {
-            int[] result = new int[1];
-            result[0] = -1;
-            return result;
-        }
-        int[] newArray = new int[array.length - 1];
-        if(r % 2 == 0) {
-            for(int i = 1 ; i < array.length ; i++) {
-                newArray[i-1] = array[i];
+            if(cmd == 'R') {
+                isRight = !isRight;	// 방향을 바꿔준다.
+                continue;
             }
-        } else {
-            for(int i = 0 ; i < array.length - 1 ; i++) {
-                newArray[i] = array[i];
-            }
-        }
-        return newArray;
-    }
-    static int calculate(String[] cal) {
 
-        for(int i = 0 ; i < cal.length ; i++) {
-            if(cal[i].equals("R")) {
-                rCount++;
+
+            // 아래는 D의 경우
+
+            // D 함수이면서 isRight가 true 일 경우
+            if(isRight) {
+
+                // 만약 반환 된 원소가 없을 경우 error를 출력하도록 하고 함수 종료
+                if(deque.pollFirst() == null) {
+                    sb.append("error\n");
+                    return;
+                }
+
             }
             else {
-                numsArray = d(numsArray,rCount);
-                if(numsArray.length > 0) {
-                    if(numsArray[0] == -1) {
-                        return 0;
-                    }
+                // 만약 반환 된 원소가 없을 경우 error를 출력하도록 하고 함수 종료
+                if(deque.pollLast() == null) {
+                    sb.append("error\n");
+                    return;
                 }
             }
         }
-        return 1;
+
+        // 모든 함수들이 정상적으로 작동했다면 덱의 남은 요소들을 출력문으로 만들어준다.
+        makePrintString(deque, isRight);
+
+    }
+
+    public static void makePrintString(ArrayDeque<Integer> deque, boolean isRight) {
+
+        sb.append('[');	// 여는 대괄호 먼저 StringBuilder에 저장
+
+        if(deque.size() > 0) {	//만약 출력 할 원소가 한 개 이상일 경우
+
+            if(isRight) {	// 정방향일경우
+
+                sb.append(deque.pollFirst());	// 먼저 첫 번째 원소를 넘겨준다.
+
+                // 그 다음 원소부터 반점을 먼저 넘겨준 후 덱의 원소를 하나씩 뽑아 넘긴다.
+                while(!deque.isEmpty()) {
+                    sb.append(',').append(deque.pollFirst());
+                }
+            }
+            else {	// 역방향일경우
+                sb.append(deque.pollLast());	// 먼저 뒤에서부터 첫 번째 원소를 넘겨준다.
+
+                // 그 다음 원소부터 반점을 먼저 넘겨준 후 덱의 원소를 뒤에서부터 하나씩 뽑아 넘긴다.
+                while(!deque.isEmpty()) {
+                    sb.append(',').append(deque.pollLast());
+                }
+            }
+        }
+
+        sb.append(']').append('\n');	// 닫는 대괄호 및 개행으로 마무리
     }
 }
+
+
+
+
+
+//////////////////////////////////////////// 틀린 풀이///////////////////////////////
+//import java.io.*;
+//import java.util.StringTokenizer;
+//
+//public class p5430 {
+//    static int[] numsArray;
+//    static int rCount;
+//    public static void main(String[] args) throws IOException {
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//
+//        int iter = Integer.parseInt(br.readLine());
+//        StringTokenizer st;
+//        for(int i = 0 ; i < iter ; i++) {
+//            String[] cal = br.readLine().split("");
+//            int numCount = Integer.parseInt(br.readLine());
+//            st = new StringTokenizer(br.readLine(),"[],");
+//            rCount = 0;
+//            numsArray = new int[numCount];
+//
+//            if(st.countTokens() > 0) {
+//                for(int j = 0 ; j < numCount ; i++) {
+//                    numsArray[j] = Integer.parseInt(st.nextToken());
+//                }
+//            }
+//
+//            int result = calculate(cal);
+//
+//
+//            if(result == 0){
+//                bw.write("error\n");
+//            } else {
+//                bw.write("[");
+//                if(rCount % 2 ==0 ){
+//                    for(int j = 0 ; j < numsArray.length ; j++) {
+//                        bw.write(numsArray[j]+"");
+//                        if(j < numsArray.length - 1) {
+//                            bw.write(",");
+//                        }
+//                        else {
+//                            bw.write("]\n");
+//                        }
+//                    }
+//                } else {
+//                    for(int j = numsArray.length - 1 ; j >= 0 ; j--) {
+//                        bw.write(numsArray[j]+"");
+//                        if(j > 0) {
+//                            bw.write(",");
+//                        }
+//                        else {
+//                            bw.write("]\n");
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//
+//        bw.flush();
+//        bw.close();
+//        br.close();
+//    }
+//
+////    static int[] stringToIntArray(int numCount, String s) {
+////        int[] nums = new int[numCount];
+////
+////        if(numCount > 0) {
+////            nums = new int[numCount];
+////
+////
+////        }
+////
+////        return nums;
+////    }
+//
+////    static int[] r(int[] array) {
+////        if(array.length > 1) {
+////
+////            int[] newArray = new int[array.length];
+////
+////            for(int i = 0 ; i < array.length ; i++) {
+////                int temp = array[i];
+////                newArray[i] = array[array.length - i - 1];
+////                array[i] = temp;
+////            }
+////
+////            return newArray;
+////        }
+////        else {
+////            return array;
+////        }
+////    }
+//
+//    static int[] d(int[] array,int r) {
+//
+//        if(array.length == 0 || array.length < 0) {
+//            int[] result = new int[1];
+//            result[0] = -1;
+//            return result;
+//        }
+//        int[] newArray = new int[array.length - 1];
+//        if(r % 2 == 0) {
+//            for(int i = 1 ; i < array.length ; i++) {
+//                newArray[i-1] = array[i];
+//            }
+//        } else {
+//            for(int i = 0 ; i < array.length - 1 ; i++) {
+//                newArray[i] = array[i];
+//            }
+//        }
+//        return newArray;
+//    }
+//    static int calculate(String[] cal) {
+//
+//        for(int i = 0 ; i < cal.length ; i++) {
+//            if(cal[i].equals("R")) {
+//                rCount++;
+//            }
+//            else {
+//                numsArray = d(numsArray,rCount);
+//                if(numsArray.length > 0) {
+//                    if(numsArray[0] == -1) {
+//                        return 0;
+//                    }
+//                }
+//            }
+//        }
+//        return 1;
+//    }
+//}
