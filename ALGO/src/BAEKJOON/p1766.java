@@ -40,6 +40,7 @@ public class p1766 {
 
     static int delete() {
 
+        return 1;
     }
 }
 
