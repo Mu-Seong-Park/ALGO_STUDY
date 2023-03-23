@@ -1,95 +1,99 @@
 package BAEKJOON;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.*;
 
 public class p4485 {
     //문제풀이
     //전형적인 다익스트라(데이크스트라) 문제.
     //모든 노드(정점)를 탐색하면서 상하좌우 방향으로 최소비용을 업데이트하면서 이동한다.
 
-    static Pos[] dir = {new Pos(0,-1), new Pos(0,1), new Pos(-1,0), new Pos(1,0)};
+    // 좌표와 가중치 class
+    static class point implements Comparable<point> {
 
+        int row, col, cost;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        while(true) {
-            int n = Integer.parseInt(br.readLine());
-            if(n == 0) {
-                break;
-            }
-
-            int[][] cave = new int[n][n];
-            for(int i = 0 ; i < n ; i++) {
-                String[] rupees = br.readLine().split(" ");
-                for(int j = 0 ; j < n ; j++) {
-                    cave[i][j] = Integer.parseInt(rupees[j]);
-                }
-            }
-
-
+        public point(int row, int col, int cost) {
+            super();
+            this.row = row;
+            this.col = col;
+            this.cost = cost;
         }
-        br.close();
-        bw.flush();
-        bw.close();
+
+        @Override
+        public int compareTo(point o) {
+            return this.cost - o.cost; // 오름차순 정렬 ( return 값이 양수일때 자리바꿈 )
+        }
+
     }
-    static void dijkstra(int[][] cave,int n) {
-        Hashtable<Pos,Integer> cheapestPriceTable = new Hashtable<>();
-        Hashtable<Pos,Pos> cheapestPreviousPosTable = new Hashtable<>();
 
-        //시작 위치는 좌측 상단 0,0
-        Pos startPos = new Pos(0,0);
+    static int N; // map의 크기, 최소루피값
+    static int[][] map; // 입력 받는 map
+    static int[][] dijk; // 최소비용을 저장
+    static int[] dy = { 0, 1, -1, 0 }; // 우 하 상 좌
+    static int[] dx = { 1, 0, 0, -1 };
 
-        //현재 위치를 나타내는 변수, 처음에는 startPos를 가리킨다.
-        Pos currentPos = startPos;
+    // 범위 검사
+    static boolean isValid(int x, int y) {
+        if (x < 0 || x >= N || y < 0 || y >= N)
+            return false;
+        return true;
+    }
 
-        //방문했던 위치를 저장할 배열
-        boolean[][] visited = new boolean[n][n];
+    public static int dijkstra() {
+        PriorityQueue<point> pq = new PriorityQueue<point>();
+        dijk[0][0] = map[0][0]; // 초기 값
+        pq.offer(new point(0, 0, map[0][0])); // 시작 좌표
 
-        for(int i = 0 ; i < n; i++) {
-            for(int j = 0 ; j < n ; j++) {
-                visited[i][j] = false;
-            }
-        }
+        while (!pq.isEmpty()) {
+            point p = pq.poll();
 
+            // 사방탐색
+            for (int k = 0; k < 4; k++) {
+                int nextRow = p.row + dy[k];
+                int nextCol = p.col + dx[k];
 
-        cheapestPriceTable.put(currentPos,cave[0][0]);
-        //동굴의 마지막 탐사가 끝날 때까지 반복
-        while(currentPos.x != n - 1 && currentPos.y != n - 1) {
-            visited[currentPos.x][currentPos.y] = true;
-            int priceThroughCurrentPos = -1;
-            //상하좌우로 인접한 배열(노드)에 방문.
-            for(int i = 0 ; i < 4 ; i++) {
-
-                Pos adjacent = new Pos(currentPos.x + dir[i].x,currentPos.y + dir[i].y);
-                //상하좌우의 좌표가 cave를 넘어가는 범위를 제외해야함.
-                if(adjacent.x >= 0 && adjacent.x < n && adjacent.y >= 0 && adjacent.y < n) {
-                    //직전의 위치에서 현재 위치의 비용을 더한 값.
-                    priceThroughCurrentPos = cheapestPriceTable.get(currentPos) + cave[adjacent.x][adjacent.y];
-
-                    Integer temp = cheapestPriceTable.putIfAbsent(adjacent, priceThroughCurrentPos);
-                    if(temp != null) {
-                        if(priceThroughCurrentPos < temp) {
-                            cheapestPriceTable.replace(adjacent,priceThroughCurrentPos);
-                            //가장 낮은 비용
-                            cheapestPreviousPosTable.put(adjacent,currentPos);
-                        }
+                // 범위 검사
+                if (isValid(nextRow, nextCol)) {
+                    if (dijk[nextRow][nextCol] > dijk[p.row][p.col] + map[nextRow][nextCol]) { // 기존의 가중치보다 작은 경우
+                        dijk[nextRow][nextCol] = dijk[p.row][p.col] + map[nextRow][nextCol]; // 가중치를 교환
+                        pq.offer(new point(nextRow, nextCol, dijk[nextRow][nextCol])); // 큐에 추가
                     }
                 }
             }
         }
-
+        return dijk[N - 1][N - 1];
     }
 
-    static class Pos {
-        int x;
-        int y;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st = null;
+        int cnt = 0; // 반복횟수
+        while (true) {
 
-        public Pos(int x, int y) {
-            this.x = x;
-            this.y = y;
+            N = Integer.parseInt(br.readLine());
+            if (N == 0)
+                break;
+            map = new int[N][N];
+            dijk = new int[N][N];
+
+            for (int i = 0; i < N; i++) {
+                st = new StringTokenizer(br.readLine());
+                for (int j = 0; j < N; j++) {
+                    map[i][j] = Integer.parseInt(st.nextToken());
+                    dijk[i][j] = Integer.MAX_VALUE;
+                }
+
+            } // end of input
+            cnt++; // 반복 횟수 증가
+            sb.append("Problem " + cnt + ": " + dijkstra() + "\n"); // 출력문
         }
-    }
+        ; // end of testcase;
+        System.out.println(sb); // 출력
+        br.close();
+    }// end of main
+
+
+
 }
