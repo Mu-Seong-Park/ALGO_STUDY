@@ -20,6 +20,7 @@ class Node implements Comparable<Node>{
 }
 
 public class p1753 {
+<<<<<<< HEAD
     private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static final BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     private static final int INF = 100_000_000;
@@ -28,6 +29,11 @@ public class p1753 {
     static int[] dist;
 
 
+=======
+    //문제풀이
+    // 1. 방향 그래프이므로, 노드(정점)이 가지는 adjacent(인접) 속성에는 일방향으로만 저장되도록 설계한다.
+    // 2. 가중치를 계산하여 최단 경로를 구하므로 데이크스트라를 사용한다.
+>>>>>>> 883594a528736c884c7542c62a621d3f8c867f9a
     public static void main(String[] args) throws IOException {
         StringTokenizer st = new StringTokenizer(br.readLine());
         v = Integer.parseInt(st.nextToken());
