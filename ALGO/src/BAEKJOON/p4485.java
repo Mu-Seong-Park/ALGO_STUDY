@@ -7,7 +7,7 @@ public class p4485 {
     //문제풀이
     //전형적인 다익스트라(데이크스트라) 문제.
     //모든 노드(정점)를 탐색하면서 상하좌우 방향으로 최소비용을 업데이트하면서 이동한다.
-
+    //블로그 참조 https://machine-geon.tistory.com/121
     // 좌표와 가중치 class
     static class point implements Comparable<point> {
 
