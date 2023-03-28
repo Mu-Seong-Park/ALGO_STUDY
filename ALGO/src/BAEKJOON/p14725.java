@@ -26,18 +26,15 @@ public class p14725 {
             for(int j = 1 ; j <= k ; j++) {
                 if(nodes[j - 1].adjacent.containsKey(info[j])) {
                     nodes[j] = nodes[j - 1].adjacent.get(info[j]);
-                    bw.write(info[j]+"가 있습니다. 주소는: "+nodes[j]+"\n");
                     continue;
                 } else {
-                    nodes[j - 1].add(info[j]);
+                    nodes[j - 1].add(info[j],j - 1);
                     nodes[j] = nodes[j - 1].adjacent.get(info[j]);
-                    bw.write(info[j]+"가 없어서 추가했습니다. 주소는: "+nodes[j]+"\n");
-
                 }
             }
         }
 
-        DFS(root,0);
+        DFS(root);
         br.close();
         bw.flush();
         bw.close();
@@ -45,29 +42,22 @@ public class p14725 {
 
     /**
      * @param currentNode 현재 노드를 입력한다.
-     * @param n           현재가 몇 층인지 알기 위해서 입력하는 숫자
-     *                    n을 통해서 "-"를 몇 번(n*2) 출력할지 정한다.
      */
-    static void DFS(Node currentNode,int n) {
+    static void DFS(Node currentNode) {
 
         //DFS 기저조건 : 자식이 없는 노드의 경우 null을 리턴할 것이므로, null인 경우 메소드 종료
         if(currentNode == null) {
             return;
         }
-        
+        if(currentNode.name != "root") {
+            System.out.println(currentNode.name);
+        }
+
         ArrayList<String> currentKeys = new ArrayList<>(currentNode.adjacent.keySet());
         Collections.sort(currentKeys);
 
         for(String key : currentKeys) {
-            if(currentNode.name == "root") {
-                DFS(currentNode.adjacent.get(key), n);
-            } else {
-                for(int i = 0 ; i < n * 2 ; i++) {
-                    System.out.print("-");
-                }
-                System.out.println(currentNode.name+" 주소:"+currentNode);
-                DFS(currentNode.adjacent.get(key), ++n);
-            }
+            DFS(currentNode.adjacent.get(key));
         }
     }
 
@@ -82,9 +72,18 @@ public class p14725 {
             adjacent = new Hashtable<>();
         }
 
-        public void add(String name) {
+        public void add(String name,int n) {
             adjacent.put(name,new Node(name));
+            StringBuilder str = new StringBuilder();
+            for(int i = 0 ; i < n * 2 ; i++) {
+                str.append("-");
+            }
+            str.append(name);
+            adjacent.get(name).setName(str.toString());
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }
