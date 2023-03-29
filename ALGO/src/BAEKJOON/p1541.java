@@ -10,8 +10,6 @@ public class p1541 {
         // 2. 위 과정을 진행하면서, +나 -또한 부호 배열에 저장.
         // 3. 부호 배열을 탐색하면서 -를 만나면 다음 -가 나올 때까지 더해준 뒤에 그 값을 첫번째 숫자에서 빼준다.
 
-
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         String expression = br.readLine(); // 수식 저장
