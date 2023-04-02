@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
+import java.util.TreeMap;
 
 public class p7662 {
     public static void main(String[] args) throws IOException {
@@ -14,16 +15,25 @@ public class p7662 {
 
         for(int t = 0 ; t < testCase ; t++) {
             int command = Integer.parseInt(br.readLine());
-
+            TreeMap<Integer,Integer> queue = new TreeMap<>();
             for(int i = 0 ; i < command ; i++) {
                 String[]  cmnd = br.readLine().split(" ");
-
+                int n = Integer.parseInt(cmnd[1]);
                 if(cmnd[0].equals("I")) {
-
+                    queue.put(n,queue.getOrDefault(n,0)+1);
                 } else {
-
+                    if(!queue.isEmpty()) {
+                        //n이 1인 경우, num에 lastKey를 저장해서 최댓값 삭제, 1이 아닌 경우
+                        //firstKey를 저장해서 최솟값 삭제.
+                        int num = n == 1 ? queue.lastKey() : queue.firstKey();
+                        if(queue.put(num, queue.get(num) - 1) == 1) {
+                            queue.remove(num);
+                        }
+                    }
                 }
             }
+            //treemap이 비었으면 empty 출력, 아니라면 최댓값 최솟값을 출력.
+            bw.write(queue.isEmpty() ? "EMPTY\n" : queue.lastKey() + " " + queue.firstKey() + "\n");
 
 
         }
@@ -31,32 +41,6 @@ public class p7662 {
         br.close();
         bw.flush();
         bw.close();
-    }
-
-    static class DoubleEndedPriorityQueue {
-        ArrayList<Node> heap;
-        int firstNode;
-        int lastNode;
-
-        public DoubleEndedPriorityQueue() {
-            heap = new ArrayList<>();
-            this.firstNode = heap.size();
-            this.lastNode = heap.size();
-        }
-
-        void offer
-    }
-    static class Node {
-        private int value;
-//        private ArrayList<Node> child;
-
-        public Node(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
     }
 }
 
