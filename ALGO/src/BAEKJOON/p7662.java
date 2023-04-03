@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 
 public class p7662 {
+    // 블로그를 검색해보니 TreeMap이라는 자료구조를 사용한다.
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -33,31 +34,7 @@ public class p7662 {
         bw.close();
     }
 
-    static class DoubleEndedPriorityQueue {
-        ArrayList<Node> heap;
-        int firstNode;
-        int lastNode;
 
-        public DoubleEndedPriorityQueue() {
-            heap = new ArrayList<>();
-            this.firstNode = heap.size();
-            this.lastNode = heap.size();
-        }
-
-        void offer
-    }
-    static class Node {
-        private int value;
-//        private ArrayList<Node> child;
-
-        public Node(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 }
 
 
