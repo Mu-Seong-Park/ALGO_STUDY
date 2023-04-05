@@ -14,20 +14,20 @@ public class p7662 {
 
         int testCase = Integer.parseInt(br.readLine());
 
-        for(int t = 0 ; t < testCase ; t++) {
+        for (int t = 0; t < testCase; t++) {
             int command = Integer.parseInt(br.readLine());
-            TreeMap<Integer,Integer> queue = new TreeMap<>();
-            for(int i = 0 ; i < command ; i++) {
-                String[]  cmnd = br.readLine().split(" ");
+            TreeMap<Integer, Integer> queue = new TreeMap<>();
+            for (int i = 0; i < command; i++) {
+                String[] cmnd = br.readLine().split(" ");
                 int n = Integer.parseInt(cmnd[1]);
-                if(cmnd[0].equals("I")) {
-                    queue.put(n,queue.getOrDefault(n,0)+1);
+                if (cmnd[0].equals("I")) {
+                    queue.put(n, queue.getOrDefault(n, 0) + 1);
                 } else {
-                    if(!queue.isEmpty()) {
+                    if (!queue.isEmpty()) {
                         //n이 1인 경우, num에 lastKey를 저장해서 최댓값 삭제, 1이 아닌 경우
                         //firstKey를 저장해서 최솟값 삭제.
                         int num = n == 1 ? queue.lastKey() : queue.firstKey();
-                        if(queue.put(num, queue.get(num) - 1) == 1) {
+                        if (queue.put(num, queue.get(num) - 1) == 1) {
                             queue.remove(num);
                         }
                     }
@@ -43,11 +43,6 @@ public class p7662 {
         bw.flush();
         bw.close();
     }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 445c9d75832a85e7e6b824ea2b868ed1c0f9f57a
 }
 
 
