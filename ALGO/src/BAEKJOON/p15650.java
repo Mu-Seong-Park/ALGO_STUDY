@@ -16,7 +16,6 @@ public class p15650 {
         int n = Integer.parseInt(nums[0]);
         int m = Integer.parseInt(nums[1]);
 
-        int combi = factorial()
 
 
         br.close();
