@@ -38,7 +38,7 @@ public class p1043 {
         for(int i=1;i<=N; i++) {
             parent[i] = i;
         }
-
+        
         // 2. 진실을 아는 사람 정보 받아오기 truePeople[진실을아는사람] == true
         st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
