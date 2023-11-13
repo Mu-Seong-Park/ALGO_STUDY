@@ -45,7 +45,10 @@ public class p1043 {
         for(int i=0; i<n; i++) {
             truePeople[Integer.parseInt(st.nextToken())] = true;
         }
+        ArrayList<Integer> a = new ArrayList<>();
+        for(int x : a) {
 
+        }
         // 3. 파티 정보를 받아오면서 같은 파티에 있는 사람들 union
         ArrayList<Integer>[] peoples = new ArrayList[M];
         for(int i=0; i<M; i++) {

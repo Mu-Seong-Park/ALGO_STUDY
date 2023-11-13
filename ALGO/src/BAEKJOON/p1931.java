@@ -17,7 +17,6 @@ public class p1931 {
             meeting[i][0] = Integer.parseInt(times[0]);
             meeting[i][1] = Integer.parseInt(times[1]);
         }
-
         Arrays.sort(meeting, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
@@ -38,7 +37,6 @@ public class p1931 {
                 count++;
             }
         }
-
         bw.write(count+"\n");
         br.close();
         bw.flush();
